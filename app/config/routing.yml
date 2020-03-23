@@ -17,6 +17,11 @@ balance:
     defaults: {_controller: "AppBundle:Transaction:balance"}
     methods: GET
 
+convert:
+    path: /convert
+    defaults: {_controller: "AppBundle:Currency:convert"}
+    methods: GET
+
 chat:
     path: /
     defaults: {_controller: "AppBundle:Chat:index"}

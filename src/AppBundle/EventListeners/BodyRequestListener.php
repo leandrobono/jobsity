@@ -19,11 +19,13 @@ class BodyRequestListener
     protected $_rootDir;
     private   $_method;
     private   $_userData;
+    private   $_secret;
 
-    public function __construct($loginService, $tools, $rootDirectory) {
+    public function __construct($loginService, $tools, $rootDirectory, $secret) {
         $this->_loginService = $loginService;
         $this->_tools        = $tools;
         $this->_rootDir      = $rootDirectory;
+        $this->_secret       = $secret;
     }
 
     /**
@@ -32,6 +34,14 @@ class BodyRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        if ($request->attributes->get('_route') != "chat") {
+            $access_key = $request->query->get("access_key");
+            if ($access_key != $this->_secret) {
+                $response =  $this->_tools->response(Constants::UNAUTHORIZED, "Incorrect Access Key");
+                $event->setResponse($response);
+            }
+        }
+
         $controller = explode("\\", $request->attributes->get('_controller'));
 
         $headers = $request->headers->all();

@@ -6,6 +6,7 @@ RUN apt update
 RUN apt upgrade -y
 RUN apt install -y apt-utils
 RUN a2enmod rewrite
+RUN apt install -y git unzip
 RUN apt install -y libmcrypt-dev
 RUN docker-php-ext-install mcrypt
 RUN apt install -y libicu-dev
@@ -29,3 +30,5 @@ RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install mcrypt
 RUN docker-php-ext-install mysqli
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

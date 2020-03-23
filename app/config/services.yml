@@ -1,7 +1,7 @@
 services:
     event.listener.body:
         class: AppBundle\EventListeners\BodyRequestListener
-        arguments: ["@LoginService", "@tools", "%kernel.root_dir%"]
+        arguments: ["@LoginService", "@tools", "%kernel.root_dir%", %secret_string%]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
     jwt_auth:

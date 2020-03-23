@@ -19,7 +19,7 @@ class Currency {
     }
 
     public function checkCurrency($currency) {
-        $ch = curl_init($this->url . 'symbols?access_key=' . $this->access_key);
+        $ch = curl_init($this->url . 'currency_list.php?api_key=' . $this->access_key);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         // Store the data:
@@ -28,25 +28,33 @@ class Currency {
 
         // Decode JSON response:
         $symbols = json_decode($json, true);
-        if (!array_key_exists($currency, $symbols["symbols"])) {
+        $count = 0;
+        $found = false;
+        while($count < sizeof($symbols["currencies"]) && !$found) {
+            if ($symbols["currencies"][$count]["currency"] == $currency) {
+                $found = true;
+            }
+            $count++;
+        }
+        if (!$found) {
             throw new BadRequestException('Currency is invalid!');
         }
     }
 
     public function convert($from, $to, $amount) {
-        $ch = curl_init($this->url . 'convert?access_key=' . $this->access_key . "&from=" . $from . "&to=" . $to . "&amount=" . $amount);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        try {
+            $ch = curl_init($this->url . 'currency.php?api_key=' . $this->access_key . "&from=" . $from . "&to=" . $to . "&amount=" . $amount);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        // Store the data:
-        $json = curl_exec($ch);
-        curl_close($ch);
+            // Store the data:
+            $json = curl_exec($ch);
+            curl_close($ch);
 
-        // Decode JSON response:
-        $convert = json_decode($json, true);
-
-        if ($convert["success"] == true) {
-            return $convert["result"];
-        } else {
+            // Decode JSON response:
+            $convert = json_decode($json, true);
+        
+            return $convert["amount"];
+        } catch (Exception $e) {
             throw new BadRequestException("Couldnt make currency conversion!");
         }
     }

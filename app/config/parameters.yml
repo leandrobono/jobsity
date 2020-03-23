@@ -18,6 +18,6 @@ parameters:
     base_url: /web/app_dev.php/
     port_api: 8080
     protocol: 'http://'
-    fixer_url: 'http://data.fixer.io/api/'
-    fixer_access_key: '8b3515ad835253951b1a92d02ed9a8e0'
+    fixer_url: 'https://www.amdoren.com/api/'
+    fixer_access_key: 'QPyz4tyHRaTuQD9uLwrqkMSHvKB2hf'
     

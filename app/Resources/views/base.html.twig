@@ -49,15 +49,24 @@
                     }
 
                     var act = "POST";
-                    if (message[0] == "/balance") {
+                    if (message[0] == "/balance" || message[0] == "/convert") {
                         act = "GET";
                     }
 
+                    var url = "{{ app.request.getBaseURL() }}" + message[0] + "?access_key=asasf64-eer9879**987-9879_8798798";
+
+                    if (message[0] == "/convert") {
+                        url += "&message=" + json;
+                        var data = "";
+                    } else {
+                        var data = JSON.stringify({"message": json});
+                    }
+
                     $.ajax({
-                        url: "{{ app.request.getBaseURL() }}" + message[0],
+                        url: url,
                         type: act,
                         headers: headers,
-                        data: JSON.stringify({"message": json}),
+                        data: data,
                         success: function(response, textStatus, xhr) {
                             document.getElementById("but").disabled = false;
                             document.getElementById("message").value = "";

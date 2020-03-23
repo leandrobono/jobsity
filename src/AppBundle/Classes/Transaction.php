@@ -31,15 +31,19 @@ class Transaction {
                 throw new BadRequestException('Only available actions to make a transactions are: deposit and withdraw!');
             }
 
-            /*if (isset($params[2])) {
+            if (!is_numeric($params[1])) {
+                throw new BadRequestException("Amount is invalid!");
+            }
+
+            if (isset($params[2])) {
                 //check currency exists
                 try {
                     $curr->checkCurrency($params[2]);
-                    //$params[1] = $curr->convert($params[2], $token->currency, $params[1]);
+                    $params[1] = $curr->convert($params[2], $token->currency, $params[1]);
                 } catch(BadRequestException $e) {
                     throw new BadRequestException($e->getErrorMessage());
                 }
-            }*/
+            }
 
             $tran = new Transactions();
             $tran->setUser($token->id);
@@ -54,10 +58,10 @@ class Transaction {
                 }
             }
 
-            /*if (isset($params[2])) {
+            if (isset($params[2])) {
                 $tran->setFromCur($params[2]);
                 $tran->setToCur($token->currency);
-            }*/
+            }
 
             try {
                 $this->classServiceDB->persistEntity($tran);
@@ -65,6 +69,8 @@ class Transaction {
                 return "Operation Success";
             } catch(DataBaseErrorException $e) {
                 throw new DataBaseErrorException($e->getErrorMessage());
+            } catch(BadRequestException $e) {
+                throw new BadRequestException($e->getErrorMessage());
             }
         } else {
             throw new BadRequestException('To make a transaction, mandatory fields are: action amount. Optionally, currency');
