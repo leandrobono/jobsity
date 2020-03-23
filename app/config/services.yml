@@ -1,0 +1,35 @@
+services:
+    event.listener.body:
+        class: AppBundle\EventListeners\BodyRequestListener
+        arguments: ["@LoginService", "@tools", "%kernel.root_dir%"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+    jwt_auth:
+        class: AppBundle\Services\JwtAuth
+        arguments: ["@doctrine.orm.entity_manager", %algoritm%, %secret_string%, %expiration_login%, %pass_crypt_algoritm%]
+    tools:
+        class: AppBundle\Services\Tools
+        arguments: ["@jwt_auth", %app_log_path%]
+    currency:
+        class: AppBundle\Services\Currency
+        arguments: [%fixer_url%, %fixer_access_key%]
+
+    #CLASSES SERVICES
+    LoginService:
+        class: AppBundle\Classes\Defaults
+        arguments: ["@tools"]
+    UserService:
+        class: AppBundle\Classes\User
+        arguments: ["@tools", "@UserServiceDB"]
+    TransactionService:
+        class: AppBundle\Classes\Transaction
+        arguments: ["@tools", "@TransactionServiceDB"]
+
+    #DATABASE SERVICES
+    UserServiceDB:
+        class: AppBundle\Services\DBServices\UserServiceDB
+        arguments: ["@doctrine.orm.entity_manager"]
+
+    TransactionServiceDB:
+        class: AppBundle\Services\DBServices\TransactionServiceDB
+        arguments: ["@doctrine.orm.entity_manager"]

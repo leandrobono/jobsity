@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <script src="{{ asset('jquery/jquery.min.js') }}"></script>
+    </head>
+    <body>
+        {% block body %}
+            <div style='width: 100%;'>
+                <div name='messages' id='messages' style='margin-left:auto; margin-right:auto; overflow-y: scroll;
+                    width:100%; height:425px; border: 1px solid black; margin-bottom: 10px;'>
+                    <p>Welcome to the Chat Bot!</p>
+                </div>
+                <input type='text' name='message' id='message' style='width: 100%; height: 33px;' />
+                <input type='button' name='but' id='but' value="Send!" onclick='callApi();' style='width: 100%; background-color: green; height: 25px; margin-top: 10px; color: white;' />
+            </div>
+        {% endblock %}
+        {% block javascripts %}
+        <script>
+            var token = "";
+            document.getElementById("message").focus();
+
+            function callApi() {
+                var message = document.getElementById("message").value;
+                if (message != '' && message != null && message != 'undefined') {
+                    document.getElementById("but").disabled = true;
+
+                    message = message.split(" ");
+
+                    var json = "";
+                    if (message.length > 1) {
+                        for (var i = 1; i < message.length; i++) {
+                            if (i > 1) {
+                                json += " " + message[i];
+                            } else {
+                                json += message[i];
+                            }
+                        }
+                    }
+
+                    var headers = {};
+                    if (token != "") {
+                        headers = {
+                            "x-auth": token
+                        }
+                    }
+
+                    var act = "POST";
+                    if (message[0] == "/balance") {
+                        act = "GET";
+                    }
+
+                    $.ajax({
+                        url: "{{ app.request.getBaseURL() }}" + message[0],
+                        type: act,
+                        headers: headers,
+                        data: JSON.stringify({"message": json}),
+                        success: function(response, textStatus, xhr) {
+                            document.getElementById("but").disabled = false;
+                            document.getElementById("message").value = "";
+                            document.getElementById("message").focus();
+
+                            if (response) {
+                                if (xhr.status == 200) {
+                                    var resp = response.message;
+                                    if (response.message.token) {
+                                        resp = response.message.message;
+                                    }
+                                    document.getElementById("messages").innerHTML = document.getElementById("messages").innerHTML + "<br/>"
+                                    + "<p style='text-align:left; color: green; border-bottom: 1px solid;'>" + resp + "</p>";
+                                    if (response.message.token) {
+                                        token = response.message.token;
+                                    }
+                                }
+                            }
+                            document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+                        },
+                        error: function(response, textStatus, xhr) {
+                            document.getElementById("but").disabled = false;
+                            document.getElementById("message").focus();
+                            
+                            if(response.status == 400 || response.status == 401) {
+                                var message = JSON.parse(response.responseText);
+                                document.getElementById("messages").innerHTML = document.getElementById("messages").innerHTML + "<br/>"
+                                    + "<p style='text-align:right; color: red; border-bottom: 1px solid;'>" + message.message + "</p>";
+                            } else if (response.status == 404) {
+                                document.getElementById("messages").innerHTML = document.getElementById("messages").innerHTML + "<br/>"
+                                    + "<p style='text-align:right; color: red; border-bottom: 1px solid;'>Invalid command</p>";
+                            }
+                            document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+                        }
+                    });
+                }
+            }
+        </script>
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,23 @@
+create_user:
+    path: /user
+    defaults: { _controller: "AppBundle:User:create" }
+    methods: POST
+login:
+    path: /login
+    defaults: { _controller: "AppBundle:User:login" }
+    methods: POST
+
+transaction:
+    path: /transaction
+    defaults: { _controller: "AppBundle:Transaction:transaction"}
+    methods: POST
+
+balance:
+    path: /balance
+    defaults: {_controller: "AppBundle:Transaction:balance"}
+    methods: GET
+
+chat:
+    path: /
+    defaults: {_controller: "AppBundle:Chat:index"}
+    methods: GET

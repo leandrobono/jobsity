@@ -1,0 +1,32 @@
+AppBundle\Entity\Transactions:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\TransactionsRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        user:
+            type: string
+            length: '30'
+            nullable: true
+        date:
+            type: string
+            length: '150'
+            nullable: true'
+        amount:
+            type: float
+            length: '10'
+            nullable: true
+        fromCur:
+            type: string
+            length: '10'
+            nullable: true
+        toCur:
+            type: string
+            length: '10'
+            nullable: true
+    lifecycleCallbacks: {  }
