@@ -1,0 +1,23 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: mysqljobsity
+    database_port: 3306
+    database_name: jobsity
+    database_user: root
+    database_password: 
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: ThisTokenIsNotSoSecretChangeIt
+    algoritm: HS256
+    secret_string: 'asasf64-eer9879**987-9879_8798798'
+    expiration_login: 60000
+    app_log_path: /var/www/html/ingresoya/var/logs/app.log
+    pass_crypt_algoritm: sha256
+    base_url: /web/app_dev.php/
+    port_api: 8080
+    protocol: 'http://'
+    fixer_url: 'https://www.amdoren.com/api/'
+    fixer_access_key: 'QPyz4tyHRaTuQD9uLwrqkMSHvKB2hf'
+    
