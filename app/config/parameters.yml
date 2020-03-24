@@ -4,7 +4,7 @@ parameters:
     database_port: 3306
     database_name: jobsity
     database_user: root
-    database_password: 
+    database_password: null
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null
@@ -19,5 +19,4 @@ parameters:
     port_api: 8080
     protocol: 'http://'
     fixer_url: 'https://www.amdoren.com/api/'
-    fixer_access_key: 'QPyz4tyHRaTuQD9uLwrqkMSHvKB2hf'
-    
+    fixer_access_key: Si29QYFgwbcD8vBy5jMnGvHLAeyY9v
